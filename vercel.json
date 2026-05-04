@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "regions": ["fra1"],
+  "functions": {
+    "api/proxy.ts": {
+      "runtime": "edge"
+    }
+  },
+  "rewrites": [
+    { "source": "/mcp", "destination": "/api/proxy" },
+    { "source": "/mcp/(.*)", "destination": "/api/proxy" }
+  ]
+}

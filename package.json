@@ -1,0 +1,21 @@
+{
+  "name": "optim-engine-proxy",
+  "version": "1.0.0",
+  "description": "Thin edge proxy for OptimEngine MCP server, allowing browser-based demos without compromising server-to-server architecture",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "dev": "vercel dev",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
