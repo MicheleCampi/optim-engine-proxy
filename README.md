@@ -85,6 +85,20 @@ vercel --prod
 - [optim-engine-showcase](https://github.com/MicheleCampi/optim-engine-showcase) — public documentation, architecture deep-dive, 11-tool reference
 - [Public observability dashboard](https://optimengine.grafana.net/public-dashboards/21137ba340fc4b6e917a4b108db3e109) — live metrics on the upstream service
 
+## Security
+
+The security model of this proxy is **intentionally minimal** because the proxy itself stores no state and holds no secrets. The substantive security architecture — threat model, authentication, CORS strategy, rate limiting at the engine level, dependency hygiene — lives in the upstream service's [`SECURITY.md`](https://github.com/MicheleCampi/optim-engine/blob/main/SECURITY.md), which is authoritative.
+
+What this proxy contributes to the overall security posture:
+
+- **CORS enforcement at the edge.** Browser requests from origins outside the whitelist receive `403 Forbidden`. The upstream OptimEngine service does not handle CORS at all; the proxy is the only path through which browser-origin traffic can reach the solver.
+- **Origin whitelist as a hardcoded list** in `api/proxy.ts`, not a database. Adding or removing an origin requires a commit and a Vercel deploy — there is no runtime configuration surface to abuse.
+- **Rate limiting on browser traffic only.** 60 req/min per IP for browser clients; server-to-server traffic (no `Origin` header) is not double-limited, since it is already rate-limited at the upstream MCP layer.
+- **No secrets in the proxy.** No API keys, no OAuth tokens, no signing material. The Bearer token required for `/mcp/v2` is forwarded from the browser as-is and validated upstream by OptimEngine.
+- **No persistence.** Rate-limit counters live in edge memory and reset with each deploy. There is no database, no cache, no log of payloads.
+
+To report a security issue affecting this proxy specifically (for example, a CORS bypass or rate-limit evasion), open a private advisory at [github.com/MicheleCampi/optim-engine-proxy/security/advisories/new](https://github.com/MicheleCampi/optim-engine-proxy/security/advisories/new), or email `michele.campi@outlook.com` with the subject prefix `[OPTIMENGINE-PROXY-SEC]`. Issues affecting the upstream solver belong upstream — please report them at the optim-engine repository.
+
 ## License
 
 MIT
