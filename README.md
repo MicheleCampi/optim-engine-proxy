@@ -4,8 +4,8 @@ Thin edge proxy for [OptimEngine](https://github.com/MicheleCampi/optim-engine) 
 
 This proxy lives in front of the MCP transport (`/mcp` SSE and `/mcp/v2` Streamable HTTP) and lets browser-based clients call the solver without compromising the upstream service's server-to-server architecture.
 
-**Live**: `https://optim-engine-proxy.vercel.app`
-**Upstream**: `https://optim-engine-production.up.railway.app`
+**Status**: retired. The upstream OptimEngine service ran on Railway from February to 23 October 2026 and was then shut down to stop costs, so this proxy has nothing to forward to. The code is kept as a reference for the CORS/edge pattern.
+**Upstream (retired)**: `https://optim-engine-production.up.railway.app` (offline since 23 October 2026). To try it, run OptimEngine locally with Docker (see its README) and point the proxy at it.
 
 ## Why this exists
 
@@ -60,7 +60,7 @@ npm run dev        # Vercel local emulator
 # Fast tests (no network), runs in ~50ms:
 npx vitest run -t "CORS preflight|Origin validation"
 
-# Full suite including rate limit + upstream pass-through (hits live Railway):
+# Full suite including rate limit + upstream pass-through (needs a running OptimEngine upstream, e.g. the local Docker image):
 npm test
 ```
 
@@ -83,7 +83,7 @@ vercel --prod
 
 - [OptimEngine](https://github.com/MicheleCampi/optim-engine) — the upstream solver service
 - [optim-engine-showcase](https://github.com/MicheleCampi/optim-engine-showcase) — public documentation, architecture deep-dive, 11-tool reference
-- [Public observability dashboard](https://optimengine.grafana.net/public-dashboards/21137ba340fc4b6e917a4b108db3e109) — live metrics on the upstream service
+- Public observability dashboard — retired with the upstream service in October 2026
 
 ## Security
 
